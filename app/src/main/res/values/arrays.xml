@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="resturants">
+        <item>Isak\'s Iskrem</item>
+        <item>Lukas\'s Lapskaus</item>
+        <item>Hilde\'s Hamburger</item>
+        <item>Johnnadel\'s Juice</item>
+        <item>Pål\'s Pizza</item>
+        <item>Rein\'s Remulade</item>
+    </array>
+</resources>

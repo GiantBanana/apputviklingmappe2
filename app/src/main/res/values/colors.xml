@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_background">#7F7D7E</color>
+    <color name="red">#BE2020</color>
+    <color name="green">#8DC63F</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#55000000</color>
+    <color name="transparent_complete">#00000000</color>
+    <color name="blue">#1AA3E8</color>
+</resources>
