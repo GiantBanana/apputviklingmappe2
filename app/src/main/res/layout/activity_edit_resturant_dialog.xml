@@ -2,22 +2,11 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".EditResturantDialog"
-    style="@style/dialog_style">
+    style="@style/dialog_body_style">
 
-    <android.support.constraint.ConstraintLayout
-
-        style="@style/dialog_body_style"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline6"
-        app:layout_constraintEnd_toStartOf="@+id/guideline9"
-        app:layout_constraintStart_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toTopOf="@+id/guideline7">
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"
@@ -152,14 +141,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="101dp" />
-    </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="467dp" />
+        app:layout_constraintGuide_begin="413dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline7"
@@ -180,6 +168,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="367dp" />
+        app:layout_constraintGuide_begin="281dp" />
 
 </android.support.constraint.ConstraintLayout>

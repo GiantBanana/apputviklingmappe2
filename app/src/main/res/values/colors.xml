@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="main_background">#7F7D7E</color>
+    <color name="main_theme">#744057</color>
+    <color name="main_button">#3C142C</color>
+    <color name="champange">#E7D2B0</color>
+    <string name="dark_grey">#3B393C</string>
     <color name="red">#BE2020</color>
     <color name="green">#8DC63F</color>
     <color name="white">#FFFFFF</color>
-    <color name="transparent">#55000000</color>
+    <color name="transparent">#1A000000</color>
     <color name="transparent_complete">#00000000</color>
     <color name="blue">#1AA3E8</color>
 </resources>

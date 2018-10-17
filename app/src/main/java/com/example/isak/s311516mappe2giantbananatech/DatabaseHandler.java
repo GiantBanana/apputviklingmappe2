@@ -22,6 +22,7 @@ public class DatabaseHandler {
 
     public static final class BookingsTable implements BaseColumns{
         public static final String TABLE_NAME = "bookings";
+        public static final String COLUMN_NAME_DESCRIPTION = "description";
         public static final String COLUMN_NAME_RESTAURANT = "restaurant";
         public static final String COLUMN_NAME_DATE = "date";
         public static final String COLUMN_NAME_TIME = "time";
@@ -43,11 +44,12 @@ public class DatabaseHandler {
 
     private static final String SQL_CREATE_TABLE_FRIENDS = "CREATE TABLE IF NOT EXISTS " + FriendsTable.TABLE_NAME + " (" +
             FriendsTable._ID + " INTEGER PRIMARY KEY, " +
-            FriendsTable.COLUMN_NAME_NAME + " TEXT, " +
+            FriendsTable.COLUMN_NAME_NAME + " TEXT UNIQUE, " +
             FriendsTable.COLUMN_NAME_PHONE + " TEXT);";
 
     private static final String SQL_CREATE_TABLE_BOOKINGS = "CREATE TABLE IF NOT EXISTS " + BookingsTable.TABLE_NAME + " (" +
             BookingsTable._ID + " INTEGER PRIMARY KEY, " +
+            BookingsTable.COLUMN_NAME_DESCRIPTION + " TEXT UNIQUE," +
             BookingsTable.COLUMN_NAME_RESTAURANT + " TEXT, " +
             BookingsTable.COLUMN_NAME_DATE + " TEXT, " +
             BookingsTable.COLUMN_NAME_TIME + " TEXT);";
@@ -58,19 +60,18 @@ public class DatabaseHandler {
 
     private static final String SQL_CREATE_TABLE_RESTAURANTS = "CREATE TABLE IF NOT EXISTS " + RestaurantsTable.TABLE_NAME + " (" +
             RestaurantsTable._ID + " INTEGER PRIMARY KEY, " +
-            RestaurantsTable.COLUMN_NAME_NAME + " TEXT, " +
+            RestaurantsTable.COLUMN_NAME_NAME + " TEXT UNIQUE, " +
             RestaurantsTable.COLUMN_NAME_ADDRESS + " TEXT, " +
             RestaurantsTable.COLUMN_NAME_PHONE + " TEXT, " +
             RestaurantsTable.COLUMN_NAME_TYPE + " TEXT);";
 
-    private static final String SQL_SELECT_ALL_FRIENDS_IN_BOOKING = "SELECT " + FriendsTable._ID + ", " + FriendsTable.COLUMN_NAME_NAME + ", " +
-            FriendsTable.COLUMN_NAME_PHONE + " FROM " + FriendsTable.TABLE_NAME + ", "  + FriendsInBookingTable.TABLE_NAME + " WHERE " +
-            FriendsTable.TABLE_NAME + "." + FriendsTable._ID + " == " + FriendsInBookingTable.COLUMN_NAME_FRIEND_ID + " AND " +
-            FriendsInBookingTable.COLUMN_NAME_BOOKING_ID + " == ?";
+    private static final String SQL_SELECT_ALL_FRIENDS_IN_BOOKING = "SELECT * FROM " + FriendsTable.TABLE_NAME  + " WHERE "  +
+            FriendsTable._ID + " IN (SELECT " + FriendsInBookingTable.COLUMN_NAME_FRIEND_ID + " FROM " +
+            FriendsInBookingTable.TABLE_NAME + " WHERE " + FriendsInBookingTable.COLUMN_NAME_BOOKING_ID + " == ?)";
 
     public static class DbHelper extends SQLiteOpenHelper{
         private static DbHelper dbHelper;
-        private static final int DATABASE_VERSION = 1;
+        private static final int DATABASE_VERSION = 2;
         private static final String DATABASE_NAME = "BookingAPP.DB";
 
         private DbHelper(Context context){
@@ -256,6 +257,7 @@ public class DatabaseHandler {
             Booking booking = new Booking();
 
             String[] projection = {BookingsTable._ID,
+                    BookingsTable.COLUMN_NAME_DESCRIPTION,
                     BookingsTable.COLUMN_NAME_RESTAURANT,
                     BookingsTable.COLUMN_NAME_DATE,
                     BookingsTable.COLUMN_NAME_TIME
@@ -272,18 +274,22 @@ public class DatabaseHandler {
             );
 
             if (cursor.moveToFirst()){
-                booking.set_ID(cursor.getInt(cursor.getColumnIndex("_ID")));
+                booking.set_ID(cursor.getInt(cursor.getColumnIndex(BookingsTable._ID)));
+                booking.setDescription(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_DESCRIPTION)));
                 booking.setRestaurant(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_RESTAURANT)));
-                //booking.setFriends(getFriendsInBooking(booking.get_ID()));
+                booking.setFriends(getFriendsInBooking(booking.get_ID(),context));
                 booking.setDate(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_DATE)));
-                booking.setDate(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_DATE)));
+                booking.setTime(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_TIME)));
+                Log.d("dfffffffffffffffff",booking.getRestaurant());
                 arrayList.add(booking);
                 while (cursor.moveToNext()){
-                    booking.set_ID(cursor.getInt(cursor.getColumnIndex("_ID")));
+                    booking = new Booking();
+                    booking.set_ID(cursor.getInt(cursor.getColumnIndex(BookingsTable._ID)));
+                    booking.setDescription(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_DESCRIPTION)));
                     booking.setRestaurant(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_RESTAURANT)));
-                    //booking.setFriends(getFriendsInBooking(booking.get_ID()));
+                    booking.setFriends(getFriendsInBooking(booking.get_ID(),context));
                     booking.setDate(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_DATE)));
-                    booking.setDate(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_DATE)));
+                    booking.setTime(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_TIME)));
                     arrayList.add(booking);
                 }
                 db.close();
@@ -294,26 +300,53 @@ public class DatabaseHandler {
 
         }
 
+        public static ArrayList<String> getBookingDescriptions(Context context){
+            SQLiteDatabase db =  DbHelper.getInstance(context).getReadableDatabase();
+            ArrayList<String> arrayList = new ArrayList<>();
+
+            String[] projection = {BookingsTable.COLUMN_NAME_DESCRIPTION};
+
+            Cursor cursor = db.query(
+                    BookingsTable.TABLE_NAME,
+                    projection,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+
+            );
+
+            if(cursor.moveToFirst()){
+                Log.d("One bookinging","sddddddddd");
+                arrayList.add(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_DESCRIPTION)));
+                while (cursor.moveToNext()){
+                    arrayList.add(cursor.getString(cursor.getColumnIndex(BookingsTable.COLUMN_NAME_DESCRIPTION)));
+                }
+                db.close();
+                return arrayList;
+            }
+            db.close();
+            return arrayList;
+        }
+
         public static ArrayList<Friend> getFriendsInBooking(int _ID,Context context){
             SQLiteDatabase db =  DbHelper.getInstance(context).getReadableDatabase();
             ArrayList<Friend> arrayList = new ArrayList<>();
             Friend friend = new Friend();
             String[] args = new String[]{Integer.toString(_ID)};
 
-            String[] projection = {FriendsTable._ID,
-                    FriendsTable.COLUMN_NAME_NAME,
-                    FriendsTable.COLUMN_NAME_PHONE
-            };
 
             Cursor cursor = db.rawQuery(SQL_SELECT_ALL_FRIENDS_IN_BOOKING,args);
 
             if (cursor.moveToFirst()){
-                friend.set_ID(cursor.getInt(cursor.getColumnIndex("_ID")));
+                friend.set_ID(cursor.getInt(cursor.getColumnIndex(FriendsTable._ID)));
                 friend.setName(cursor.getString(cursor.getColumnIndex(FriendsTable.COLUMN_NAME_NAME)));
                 friend.setPhone(cursor.getString(cursor.getColumnIndex(FriendsTable.COLUMN_NAME_PHONE)));
                 arrayList.add(friend);
                 while (cursor.moveToNext()){
-                    friend.set_ID(cursor.getInt(cursor.getColumnIndex("_ID")));
+                    friend = new Friend();
+                    friend.set_ID(cursor.getInt(cursor.getColumnIndex(FriendsTable._ID)));
                     friend.setName(cursor.getString(cursor.getColumnIndex(FriendsTable.COLUMN_NAME_NAME)));
                     friend.setPhone(cursor.getString(cursor.getColumnIndex(FriendsTable.COLUMN_NAME_PHONE)));
                     arrayList.add(friend);
@@ -362,13 +395,16 @@ public class DatabaseHandler {
             SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
             Iterator iterator = booking.getFriends().listIterator();
+            Friend friend;
 
             db.beginTransaction();
 
+            values.put(BookingsTable.COLUMN_NAME_DESCRIPTION,booking.getDescription());
             values.put(BookingsTable.COLUMN_NAME_RESTAURANT,booking.getRestaurant());
             values.put(BookingsTable.COLUMN_NAME_DATE,booking.getDate());
-            values.put(BookingsTable.COLUMN_NAME_TIME,booking.getDate());
-            if(db.insert(BookingsTable.TABLE_NAME,null,values ) == -1 ){
+            values.put(BookingsTable.COLUMN_NAME_TIME,booking.getTime());
+            long booking_id = db.insert(BookingsTable.TABLE_NAME,null,values );
+            if(booking_id == -1 ){
                 db.endTransaction();
                 db.close();
                 return false;
@@ -376,9 +412,10 @@ public class DatabaseHandler {
 
             while (iterator.hasNext()){
                 values = new ContentValues();
-                Friend friend = (Friend) iterator.next();
+                friend = (Friend) iterator.next();
+                Log.d("Friends",friend.getName() + friend.get_ID());
                 values.put(FriendsInBookingTable.COLUMN_NAME_FRIEND_ID,friend.get_ID());
-                values.put(FriendsInBookingTable.COLUMN_NAME_BOOKING_ID,booking.get_ID());
+                values.put(FriendsInBookingTable.COLUMN_NAME_BOOKING_ID,booking_id);
                 if(db.insert(FriendsInBookingTable.TABLE_NAME,null,values) == -1){
                     db.endTransaction();
                     db.close();
@@ -428,6 +465,47 @@ public class DatabaseHandler {
             return false;
         }
 
+        public static boolean updateBooking(Booking booking,Context context){
+            SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+            String whereClause = BookingsTable._ID + " == ?";
+            String[]args = {Integer.toString(booking.get_ID())};
+            Iterator iterator = booking.getFriends().listIterator();
+            Friend friend;
+
+            db.beginTransaction();
+            values.put(BookingsTable.COLUMN_NAME_DESCRIPTION,booking.getDescription());
+            values.put(BookingsTable.COLUMN_NAME_RESTAURANT,booking.getRestaurant());
+            values.put(BookingsTable.COLUMN_NAME_DATE,booking.getDate());
+            values.put(BookingsTable.COLUMN_NAME_TIME,booking.getTime());
+
+            if(db.update(BookingsTable.TABLE_NAME,values,whereClause,args) <= 0){
+                db.endTransaction();
+                db.close();
+                return false;
+            }
+
+            deleteFriendsInBooking(booking,context);
+
+            while (iterator.hasNext()){
+                values = new ContentValues();
+                friend = (Friend) iterator.next();
+                Log.d("Name",friend.getName());
+                values.put(FriendsInBookingTable.COLUMN_NAME_FRIEND_ID,friend.get_ID());
+                values.put(FriendsInBookingTable.COLUMN_NAME_BOOKING_ID,booking.get_ID());
+                if(db.insert(FriendsInBookingTable.TABLE_NAME,null,values) == -1){
+                    db.endTransaction();
+                    db.close();
+                    return false;
+                }
+            }
+
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+            return true;
+        }
+
         public static boolean deleteRestaurant(Restaurant restaurant,Context context){
             SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
             String whereClause = RestaurantsTable._ID + " == ?";
@@ -453,6 +531,34 @@ public class DatabaseHandler {
             }
 
             db.close();
+            return false;
+        }
+
+        public static boolean deleteBooking(Booking booking,Context context){
+            SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+            String whereClause = BookingsTable._ID + " == ?";
+            String[]args = {Integer.toString(booking.get_ID())};
+
+            deleteFriendsInBooking(booking,context);
+
+            if(db.delete(BookingsTable.TABLE_NAME,whereClause,args) > 0){
+                db.close();
+                return true;
+            }
+
+
+            db.close();
+            return false;
+        }
+
+        private static boolean deleteFriendsInBooking(Booking booking, Context context){
+            SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+            String whereClause = FriendsInBookingTable.COLUMN_NAME_BOOKING_ID + " == ?";
+            String[] args = {Integer.toString(booking.get_ID())};
+
+            if (db.delete(FriendsInBookingTable.TABLE_NAME,whereClause,args) > 0) {
+                return true;
+            }
             return false;
         }
     }

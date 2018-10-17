@@ -9,10 +9,13 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,6 +42,7 @@ public class EditBookingDialog extends FragmentActivity {
     static Spinner spinnerRestaurants;
     static TextView dateField;
     static  TextView timeField;
+    static EditText description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,7 @@ public class EditBookingDialog extends FragmentActivity {
         setContentView(R.layout.activity_edit_booking_dialog);
 
         Context context = getApplicationContext();
+        booking = (Booking) getIntent().getSerializableExtra("booking");
         restaurants = DatabaseHandler.DataProccessing.getRestaurants(context);
         restaurantName = DatabaseHandler.DataProccessing.getRestaurantsNames(context);
         friends = DatabaseHandler.DataProccessing.getFriends(context);
@@ -56,15 +61,13 @@ public class EditBookingDialog extends FragmentActivity {
         timeField = findViewById(R.id.edit_booking_time);
         spinnerFriends = findViewById(R.id.edit_booking_friend_spinner);
         spinnerRestaurants = findViewById(R.id.edit_booking_restaurant_spinner);
+        description = findViewById(R.id.edit_booking_description);
 
         ListView addedFriendsList = findViewById(R.id.edit_booking_list_of_friends);
 
         arrayAdapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,friendName);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFriends.setAdapter(arrayAdapter);
-        arrayAdapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,addedFriends);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
-        addedFriendsList.setAdapter(this.arrayAdapter);
 
         findViewById(R.id.edit_booking_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,12 +84,23 @@ public class EditBookingDialog extends FragmentActivity {
         });
 
         if (booking!=null){
+            description.setText(booking.getDescription());
             dateField.setText(booking.getDate());
             timeField.setText(booking.getTime());
             arrayAdapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,restaurantName);
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerRestaurants.setAdapter(arrayAdapter);
             spinnerRestaurants.setSelection(arrayAdapter.getPosition(booking.getRestaurant()));
+            findViewById(R.id.edit_booking_save).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    remodelBooking();
+                }
+            });
+            addedFriends = getFriends(booking.getFriends());
+            arrayAdapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,addedFriends);
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+            addedFriendsList.setAdapter(this.arrayAdapter);
 
         }else {
             arrayAdapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,restaurantName);
@@ -96,7 +110,17 @@ public class EditBookingDialog extends FragmentActivity {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
             dateField.setText(simpleDateFormat.format(date));
             timeField.setText("18:00");
+            findViewById(R.id.edit_booking_save).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    buildBooking();
+                }
+            });
+            arrayAdapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,addedFriends);
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+            addedFriendsList.setAdapter(this.arrayAdapter);
         }
+
     }
 
     private static void updateAddedFriends(){
@@ -106,16 +130,53 @@ public class EditBookingDialog extends FragmentActivity {
         }
     }
 
-    private void getFriends(ArrayList<String> addedFriends){
-        ArrayList<Friend> tempFriends = new ArrayList<Friend>();
-        for(String name: addedFriends){
+
+    private void buildBooking(){
+        booking = new Booking();
+        booking.setDescription(description.getText().toString());
+        booking.setRestaurant(spinnerRestaurants.getSelectedItem().toString());
+        booking.setDate(dateField.getText().toString());
+        booking.setTime(timeField.getText().toString());
+        Log.d("Time",booking.getTime());
+        ArrayList<Friend> arrayList = new ArrayList<Friend>();
+        for(String addedFriend: addedFriends){
             for(Friend friend: friends){
-                if(friend.getName().equals(name)){
-                    tempFriends.add(friend);
+                if(friend.getName().equals(addedFriend)){
+                    arrayList.add(friend);
                 }
             }
         }
-        booking.setFriends(tempFriends);
+        booking.setFriends(arrayList);
+
+        DatabaseHandler.DataProccessing.insertBooking(booking,this);
+        finish();
+    }
+
+    private void remodelBooking(){
+        booking.setDescription(description.getText().toString());
+        booking.setRestaurant(spinnerRestaurants.getSelectedItem().toString());
+        booking.setDate(dateField.getText().toString());
+        booking.setTime(timeField.getText().toString());
+        ArrayList<Friend> arrayList = new ArrayList<Friend>();
+        for(String addedFriend: addedFriends){
+            for(Friend friend: friends){
+                if(friend.getName().equals(addedFriend)){
+                    arrayList.add(friend);
+                }
+            }
+        }
+        booking.setFriends(arrayList);
+
+        DatabaseHandler.DataProccessing.updateBooking(booking,this);
+        finish();
+    }
+
+    private static ArrayList<String> getFriends(ArrayList<Friend> friends){
+        ArrayList<String> arrayList =  new ArrayList<String>();
+        for(Friend friend: friends){
+            arrayList.add(friend.getName());
+        }
+        return arrayList;
     }
 
 

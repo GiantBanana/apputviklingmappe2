@@ -1,29 +1,32 @@
 package com.example.isak.s311516mappe2giantbananatech;
 
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 
-public class MainActivity extends ListActivity {
+
+public class MainActivity extends AppCompatActivity {
     ArrayList<Restaurant> restaurants;
     ArrayList<String> restaurantName;
     ArrayList<Friend> friends;
     ArrayList<String> friendName;
     ArrayList<Booking> bookings;
+    ArrayList<String> bookingDescription;
     CustomAdapter arrayAdapter;
+    ListView mainList;
 
     String activeList;
     @Override
@@ -37,9 +40,11 @@ public class MainActivity extends ListActivity {
         friends = DatabaseHandler.DataProccessing.getFriends(context);
         friendName = DatabaseHandler.DataProccessing.getFriendsNames(context);
         bookings = DatabaseHandler.DataProccessing.getBookings(context);
+        bookingDescription = DatabaseHandler.DataProccessing.getBookingDescriptions(context);
         arrayAdapter = new CustomAdapter(context,android.R.layout.simple_list_item_1,restaurantName);
-        getListView().setAdapter(arrayAdapter);
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mainList = findViewById(R.id.main_list);
+        mainList.setAdapter(arrayAdapter);
+        mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Restaurant restaurant = getRestaurant((String) arrayAdapter.getItem(position));
@@ -60,8 +65,8 @@ public class MainActivity extends ListActivity {
                 activeList = "restaurants";
                 Context context = getApplicationContext();
                 arrayAdapter = new CustomAdapter(context,android.R.layout.simple_list_item_1,restaurantName);
-                getListView().setAdapter(arrayAdapter);
-                getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                mainList.setAdapter(arrayAdapter);
+                mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Restaurant restaurant = getRestaurant((String) arrayAdapter.getItem(position));
@@ -77,8 +82,8 @@ public class MainActivity extends ListActivity {
                 activeList = "friends";
                 Context context = getApplicationContext();
                 arrayAdapter = new CustomAdapter(context,android.R.layout.simple_list_item_1,friendName);
-                getListView().setAdapter(arrayAdapter);
-                getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                mainList.setAdapter(arrayAdapter);
+                mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Friend friend = getFriend((String) arrayAdapter.getItem(position));
@@ -87,6 +92,87 @@ public class MainActivity extends ListActivity {
                 });
             }
         });
+
+        findViewById(R.id.bookings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activeList = "bookings";
+                Context context = getApplicationContext();
+                arrayAdapter = new CustomAdapter(context,android.R.layout.simple_list_item_1,bookingDescription);
+                mainList.setAdapter(arrayAdapter);
+                mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Booking booking = getBooking((String) arrayAdapter.getItem(position));
+                        showDialog(booking);
+                    }
+                });
+            }
+        });
+
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
+        Intent intent = new Intent(this,TaskScheduler.class);
+        this.startService(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.overflow, menu);
+        return true;
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Context context = getApplicationContext();
+        restaurants = DatabaseHandler.DataProccessing.getRestaurants(context);
+        restaurantName = DatabaseHandler.DataProccessing.getRestaurantsNames(context);
+        friends = DatabaseHandler.DataProccessing.getFriends(context);
+        friendName = DatabaseHandler.DataProccessing.getFriendsNames(context);
+        bookings = DatabaseHandler.DataProccessing.getBookings(context);
+        bookingDescription = DatabaseHandler.DataProccessing.getBookingDescriptions(context);
+        switch (activeList){
+            case "restaurants":
+                activeList = "restaurants";
+                arrayAdapter = new CustomAdapter(context,android.R.layout.simple_list_item_1,restaurantName);
+                mainList.setAdapter(arrayAdapter);
+                mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Restaurant restaurant = getRestaurant((String) arrayAdapter.getItem(position));
+                        showDialog(restaurant);
+                    }
+                });
+                break;
+            case "friends":
+                activeList = "friends";
+                arrayAdapter = new CustomAdapter(context,android.R.layout.simple_list_item_1,friendName);
+                mainList.setAdapter(arrayAdapter);
+                mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Friend friend = getFriend((String) arrayAdapter.getItem(position));
+                        showDialog(friend);
+                    }
+                });
+                break;
+            case "bookings":
+                activeList = "bookings";
+                context = getApplicationContext();
+                arrayAdapter = new CustomAdapter(context,android.R.layout.simple_list_item_1,bookingDescription);
+                mainList.setAdapter(arrayAdapter);
+                mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Booking booking = getBooking((String) arrayAdapter.getItem(position));
+                        showDialog(booking);
+                    }
+                });
+                break;
+        }
 
     }
 
@@ -117,14 +203,15 @@ public class MainActivity extends ListActivity {
                 break;
             case "bookings":
                 Intent intent = new Intent(this,EditBookingDialog.class);
+                Booking booking = null;
+                intent.putExtra("booking",booking);
                 startActivity(intent);
+                break;
         }
     }
 
     private Restaurant getRestaurant(String name){
         for(Restaurant restaurant: restaurants){
-            Log.d("Names",restaurant.getName());
-
             if(restaurant.getName().equals(name)){
                 return restaurant;
             }
@@ -139,6 +226,19 @@ public class MainActivity extends ListActivity {
             }
         }
         return null;
+    }
+
+    private Booking getBooking(String description){
+        for(Booking booking: bookings){
+            if(booking.getDescription().equals(description));
+            return booking;
+        }
+        return null;
+    }
+
+    public void goToSettings(MenuItem menuItem){
+        Intent intent = new Intent(this,SettingsActivity.class);
+        startActivity(intent);
     }
 
 }

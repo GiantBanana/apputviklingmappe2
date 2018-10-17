@@ -1,6 +1,8 @@
 package com.example.isak.s311516mappe2giantbananatech;
 
-public class Friend {
+import java.io.Serializable;
+
+public class Friend implements Serializable {
     private int _ID;
     private String name;
     private String phone;

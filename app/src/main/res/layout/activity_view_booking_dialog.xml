@@ -2,27 +2,15 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".ViewBookingDialog"
-    style="@style/dialog_style">
+    style="@style/dialog_body_style">
 
-    <android.support.constraint.ConstraintLayout
-        style="@style/dialog_body_style"
-        android:layout_height="418dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline6"
-        app:layout_constraintEnd_toStartOf="@+id/guideline9"
-        app:layout_constraintHorizontal_bias="0.468"
-        app:layout_constraintStart_toStartOf="@+id/guideline8"
-        app:layout_constraintTop_toTopOf="@+id/guideline7"
-        app:layout_constraintVertical_bias="0.6">
+
 
         <Button
-            android:id="@+id/view_friend_edit"
+            android:id="@+id/view_booking_edit"
             style="@style/button_style"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -36,7 +24,7 @@
             app:layout_constraintTop_toTopOf="@+id/guideline24" />
 
         <Button
-            android:id="@+id/view_friend_delete"
+            android:id="@+id/view_booking_delete"
             style="@style/button_style"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -62,14 +50,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="157dp" />
+            app:layout_constraintGuide_begin="258dp" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline19"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="110dp" />
+            app:layout_constraintGuide_begin="207dp" />
 
         <TextView
             android:id="@+id/textView5"
@@ -84,18 +72,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline19" />
 
-        <TextView
-            android:id="@+id/view_booking_date_time"
-            style="@style/text_box"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="TextView"
-            app:layout_constraintBottom_toTopOf="@+id/guideline18"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline17"
-            app:layout_constraintTop_toTopOf="@+id/guideline19" />
+    <TextView
+        android:id="@+id/view_booking_date_time"
+        style="@style/text_box"
+        android:layout_width="184dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline17"
+        app:layout_constraintTop_toTopOf="@+id/guideline19" />
 
         <TextView
             android:id="@+id/view_booking_restaurant"
@@ -128,23 +117,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="61dp" />
+            app:layout_constraintGuide_begin="147dp" />
 
         <Button
-            android:id="@+id/view_friend_x_button"
+            android:id="@+id/view_booking_x_button"
             style="@style/x_button"
             android:layout_width="48dp"
             android:layout_height="38dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/guideline17"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.47" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView6"
@@ -159,42 +145,74 @@
             app:layout_constraintHorizontal_bias="0.428"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline18"
-            app:layout_constraintVertical_bias="0.221" />
+            app:layout_constraintVertical_bias="0.671" />
 
-        <ListView
-            android:id="@+id/view_booking_friend_list"
-            android:layout_width="115dp"
-            android:layout_height="98dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline17"
-            app:layout_constraintTop_toTopOf="@+id/guideline18" />
+    <ListView
+        android:id="@+id/view_booking_friend_list"
+        android:layout_width="197dp"
+        android:layout_height="98dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline17"
+        app:layout_constraintTop_toTopOf="@+id/guideline18" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="295dp" />
-    </android.support.constraint.ConstraintLayout>
+            app:layout_constraintGuide_begin="368dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline29"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="68dp" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/description"
+            app:layout_constraintBottom_toTopOf="@+id/guideline20"
+            app:layout_constraintEnd_toStartOf="@+id/guideline17"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline29"
+            style="@style/label"/>
+
+        <TextView
+            android:id="@+id/view_booking_description"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toTopOf="@+id/guideline20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline17"
+            app:layout_constraintTop_toTopOf="@+id/guideline29"
+            style="@style/label"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="467dp" />
+        app:layout_constraintGuide_begin="429dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="40dp" />
+        app:layout_constraintGuide_begin="-54dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline8"
@@ -208,6 +226,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="367dp" />
+        app:layout_constraintGuide_begin="383dp" />
 
 </android.support.constraint.ConstraintLayout>

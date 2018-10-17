@@ -5,64 +5,86 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        app:title="@string/title"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/main_theme"
+        android:elevation="4dp"
+        android:visibility="visible"
+        app:titleTextColor="@color/champange"/>
 
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/main_list"
         android:layout_width="match_parent"
-        android:layout_height="422dp"
+        android:layout_height="392dp"
         android:layout_margin="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"></ListView>
+        app:layout_constraintTop_toTopOf="@+id/guideline27"></ListView>
 
     <Button
         android:id="@+id/restaurants"
+        style="@style/button_style"
+        android:layout_marginVertical="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@color/main_button"
+        android:textColor="@color/champange"
         android:text="@string/restaurants"
         app:layout_constraintBottom_toTopOf="@+id/guideline27"
         app:layout_constraintEnd_toStartOf="@+id/guideline25"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/button_style"/>
+        app:layout_constraintTop_toTopOf="@+id/guideline30"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/friends"
+        style="@style/button_style"
+        android:layout_marginVertical="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/friends"
+        android:background="@color/main_button"
+        android:textColor="@color/champange"        android:text="@string/friends"
         app:layout_constraintBottom_toTopOf="@+id/guideline27"
         app:layout_constraintEnd_toStartOf="@+id/guideline26"
-        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="@+id/guideline25"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/button_style"/>
+        app:layout_constraintTop_toTopOf="@+id/guideline30"
+        app:layout_constraintVertical_bias="1.0" />
+    />
 
     <Button
         android:id="@+id/bookings"
+        style="@style/button_style"
+        android:layout_height="48dp"
+        android:layout_marginVertical="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@color/main_button"
+        android:textColor="@color/champange"
         android:text="@string/bookings"
         app:layout_constraintBottom_toTopOf="@+id/guideline27"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintHorizontal_bias="0.619"
         app:layout_constraintStart_toStartOf="@+id/guideline26"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/button_style"/>
+        app:layout_constraintTop_toTopOf="@+id/guideline30"
+        app:layout_constraintVertical_bias="1.0" />
+    />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline25"
@@ -83,5 +105,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="92dp" />
+        app:layout_constraintGuide_begin="116dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="-119dp" />
+
 </android.support.constraint.ConstraintLayout>

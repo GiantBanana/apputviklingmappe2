@@ -29,4 +29,11 @@
     <string name="restaurants">Restaurants</string>
     <string name="friend">Friend</string>
     <string name="types">Types</string>
+    <string name="description">Description</string>
+    <string name="title">EatYourFriends</string>
+    <string name="sms_on">Automatic SMS notification ON.</string>
+    <string name="sms_off">Automatic SMS notification OFF.</string>
+    <string name="set_time">Set notification time</string>
+    <string name="set_message">Set notification message</string>
+    <string name="settings">Settings</string>
 </resources>

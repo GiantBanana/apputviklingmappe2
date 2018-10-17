@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:summaryOn="@string/sms_on"
+        android:summaryOff="@string/sms_off"
+        android:onClick="enablePreference"
+        android:key="on_off">
+    </SwitchPreference>
+    <com.example.isak.s311516mappe2giantbananatech.TimePreference
+        android:summary="@string/set_time"
+        android:key="set_time">
+    </com.example.isak.s311516mappe2giantbananatech.TimePreference>
+    <EditTextPreference
+        android:key="set_message"
+        android:summary="@string/set_message">
+    </EditTextPreference>
+</PreferenceScreen>

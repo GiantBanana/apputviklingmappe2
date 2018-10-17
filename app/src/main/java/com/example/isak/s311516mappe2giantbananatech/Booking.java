@@ -1,16 +1,19 @@
 package com.example.isak.s311516mappe2giantbananatech;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Booking {
+public class Booking implements Serializable {
     private int _ID;
+    private String description;
     private String restaurant;
     private ArrayList<Friend> friends;
     private String date;
     private String time;
 
-    public Booking(String restaurant, ArrayList<Friend> friends, String date, String time) {
+    public Booking(String description, String restaurant, ArrayList<Friend> friends, String date, String time) {
+        this.description = description;
         this.restaurant = restaurant;
         this.friends = friends;
         this.date = date;
@@ -26,6 +29,14 @@ public class Booking {
 
     public void set_ID(int _ID) {
         this._ID = _ID;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getRestaurant() {
